@@ -34,7 +34,7 @@ var generateCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		err := near.GenerateNewKeystore(out, password)
+		err := GenerateNewKeystore(out, password)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -48,4 +48,23 @@ func init() {
 	generateCmd.Flags().StringVarP(&out, "out", "o", "keystore.json", "OutPut file path")
 	generateCmd.MarkFlagRequired("pass")
 
+}
+
+func GenerateNewKeystore(file string, pw string) error {
+
+	///Generate New KeyPair
+
+	keypair, err := near.NewKeyPair()
+	if err != nil {
+		return err
+	}
+
+	/// Genreate KeyStore from the Private Key obtained from Keypair
+
+	err = near.EncryptKey(keypair, pw, file)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

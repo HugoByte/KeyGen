@@ -9,6 +9,7 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/gofrs/uuid"
@@ -24,25 +25,6 @@ const (
 	cipherAES128CTR = "aes-128-ctr"
 )
 
-func GenerateNewKeystore(file string, pw string) error {
-
-	///Generate New KeyPair
-
-	keypair, err := NewKeyPair()
-	if err != nil {
-		return err
-	}
-
-	/// Genreate KeyStore from the Private Key obtained from Keypair
-
-	err = EncryptKey(keypair.privateKey, pw, file)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func sha3sumkeccak256(data ...[]byte) []byte {
 	s := sha3.NewLegacyKeccak256()
 	for _, d := range data {
@@ -51,7 +33,13 @@ func sha3sumkeccak256(data ...[]byte) []byte {
 	return s.Sum([]byte{})
 }
 
-func EncryptKey(s ed25519.PrivateKey, pw string, file string) error {
+func EncryptKey(kP interface{}, pw string, file string) error {
+
+	keypair, Ok := (kP).(*Keypair)
+	if !Ok {
+		return fmt.Errorf("some error")
+	}
+	s := keypair.privateKey
 	var ks common.KeyStoreData
 	var k common.ScryptParams
 	var c common.AES128CTRParams
