@@ -112,7 +112,12 @@ func EncryptKey(kP interface{}, pw string, file string) error {
 
 }
 
-func DecryptKey(ksData *common.KeyStoreData, password string) (ed25519.PrivateKey, error) {
+func DecryptKey(data []byte, password string) (ed25519.PrivateKey, error) {
+
+	var ksData common.KeyStoreData
+	if err := json.Unmarshal(data, &ksData); err != nil {
+		return nil, err
+	}
 
 	pwb := sha512.Sum512([]byte(password))
 	if ksData.Crypto.Cipher != "aes-128-ctr" {

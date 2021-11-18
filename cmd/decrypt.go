@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/hugobyte/keygen/keystore/common"
 	n "github.com/hugobyte/keygen/keystore/near"
 	"github.com/spf13/cobra"
 )
@@ -75,24 +74,11 @@ func DecryptKeyStore(file string, password string) (ed25519.PrivateKey, error) {
 		return nil, err
 	}
 
-	ksd, err := newKeyStoreData(keystorejson)
-	if err != nil {
-		return nil, err
-	}
-	privateKey, err := n.DecryptKey(ksd, password)
+	privateKey, err := n.DecryptKey(keystorejson, password)
 	if err != nil {
 		return nil, err
 	}
 
 	return privateKey, nil
 
-}
-
-func newKeyStoreData(data []byte) (*common.KeyStoreData, error) {
-	var ksData common.KeyStoreData
-	if err := json.Unmarshal(data, &ksData); err != nil {
-		return nil, err
-	}
-
-	return &ksData, nil
 }
