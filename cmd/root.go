@@ -23,9 +23,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "keystore",
-	Short: "KeyStore is a CLI tool to Generate and Decrypt Keystores",
-	Long: `KeyStore CLI helps in Generating Keystores from the Privatekey and the secret and stores it as json.
+	Use:   "keygen",
+	Short: "Keygen is a CLI tool to Generate and Decrypt Keystore",
+	Long: `Keygen CLI helps in Generating Keystore from the Privatekey and the secret and stores it as json.
   And also this can be used to decrypt the Keystore genrated`,
 }
 
