@@ -96,7 +96,7 @@ func EncryptKey(kP interface{}, pw string, file string) error {
 
 		address := hex.EncodeToString(s.Public().(ed25519.PublicKey))
 
-		ks.Address = []byte(address)
+		ks.Address = address
 
 		output, err := json.Marshal(&ks)
 

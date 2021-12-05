@@ -10,7 +10,7 @@ import (
 )
 
 type KeyStoreData struct {
-	Address  []byte     `json:"address"`
+	Address  string     `json:"address"`
 	ID       string     `json:"id"`
 	Version  int        `json:"version"`
 	CoinType string     `json:"coinType"`

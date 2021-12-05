@@ -17,11 +17,14 @@ package cmd
 
 import (
 	"crypto/ed25519"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 
+	"github.com/btcsuite/btcutil/base58"
+	"github.com/hugobyte/keygen/keystore/common"
 	n "github.com/hugobyte/keygen/keystore/near"
 	"github.com/spf13/cobra"
 )
@@ -30,6 +33,12 @@ var (
 	file string
 	pass string
 )
+
+type JsonOut struct {
+	PrivateKey string `json:"PrivateKey"`
+	PublicKey  string `json:"PublicKey"`
+	AccountId  string `json:"AccountId"`
+}
 
 // decryptCmd represents the decrypt command
 var decryptCmd = &cobra.Command{
@@ -45,15 +54,19 @@ var decryptCmd = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(0)
 		}
+		out := &JsonOut{
+			PrivateKey: base58.Encode(private),
+			PublicKey:  base58.Encode(private.Public().(ed25519.PublicKey)),
+			AccountId:  hex.EncodeToString(private.Public().(ed25519.PublicKey)),
+		}
 
-		pKey, err := json.Marshal(private)
+		outPut, err := json.Marshal(out)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
-
 		}
 
-		fmt.Println(string(pKey))
+		common.WriteFile("Decrypt.json", outPut, 0600)
 
 	},
 }
