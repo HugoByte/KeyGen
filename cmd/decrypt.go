@@ -74,7 +74,7 @@ var decryptCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(decryptCmd)
 
-	decryptCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password to Create KeyStore")
+	decryptCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password to Decrypt KeyStore")
 	decryptCmd.Flags().StringVarP(&file, "file", "f", "", "Keystore File or KeyStore File Path")
 	decryptCmd.MarkFlagRequired("pass")
 	decryptCmd.MarkFlagRequired("file")
