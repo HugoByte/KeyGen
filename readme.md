@@ -55,6 +55,9 @@ Set a password for your keystore using the **-p** flag
 
 `keygen generate -p <your_password> -o <Output filepath / Output Filename>`
 
+#### screenshot
+
+![alt text](screenshot/image2.png)
   
 
 ### Decrypt
@@ -65,7 +68,9 @@ You can decrypt the library files only using your password
 
 `keygen decrypt -f <file_name> -p <your_password>`
 
+#### screenshot
 
+![alt text](screenshot/image3.png)
   
 
 #### License
