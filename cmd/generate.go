@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +26,8 @@ var password string
 
 var out string
 
+var privateKey string
+
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
@@ -34,10 +36,18 @@ var generateCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		err := GenerateNewKeystore(out, password)
-		if err != nil {
-			fmt.Println(err)
+		if privateKey != "" {
+			err := GenerateNewKeystoreFromSeed(out, privateKey, password)
+			if err != nil {
+				fmt.Println(err)
+			}
+		} else {
+			err := GenerateNewKeystore(out, password)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
+
 	},
 }
 
@@ -47,6 +57,7 @@ func init() {
 	generateCmd.Flags().StringVarP(&password, "pass", "p", "", "Password to Create KeyStore")
 	generateCmd.Flags().StringVarP(&out, "out", "o", "keystore.json", "OutPut file path")
 	generateCmd.MarkFlagRequired("pass")
+	generateCmd.Flags().StringVarP(&privateKey, "secretKey", "s", "", "Secret / Private Key")
 
 }
 
@@ -62,6 +73,22 @@ func GenerateNewKeystore(file string, pw string) error {
 	/// Genreate KeyStore from the Private Key obtained from Keypair
 
 	err = near.EncryptKey(keypair, pw, file)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GenerateNewKeystoreFromSeed(file string, privateKey string, password string) error {
+
+	keypair, err := near.NewKeyPairFromPrivateKey(privateKey)
+
+	if err != nil {
+		return err
+	}
+
+	err = near.EncryptKey(keypair, password, file)
 	if err != nil {
 		return err
 	}
