@@ -43,5 +43,3 @@ func NewKeyPairFromPrivateKey(privateKey string) (*Keypair, error) {
 
 	return keyPair, nil
 }
-
-//hub bacon history scissors joy thing surprise friend spin dust winter rural
